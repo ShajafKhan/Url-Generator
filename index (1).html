@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Generator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            color: #333;
+        }
+
+        .url-generator-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        form .form-group {
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .date-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .date-group {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .error-msg {
+            display: none;
+            color: #d9534f;
+            font-size: 0.875em;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #generatedUrls {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #generatedUrls a {
+            color: #007BFF;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        #generatedUrls a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="url-generator-container">
+        <h1>Create Your Countdown and Birthday Card</h1>
+        <form id="urlGeneratorForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Countdown End Date</label>
+                <div class="date-inputs">
+                    <div class="date-group">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" name="year" required min="2025" max="2100">
+                    </div>
+                    <div class="date-group">
+                        <label for="month">Month</label>
+                        <input type="number" id="month" name="month" required min="1" max="12">
+                        <small class="error-msg" id="monthErrorMsg">Please enter a valid month (01-12).</small>
+                    </div>
+                    <div class="date-group">
+                        <label for="day">Day</label>
+                        <input type="number" id="day" name="day" required min="1" max="31">
+                        <small class="error-msg" id="dayErrorMsg">Please enter a valid day for the selected month.</small>
+                    </div>
+                </div>
+            </div>
+            <button type="submit">Generate URLs</button>
+        </form>
+        <div id="generatedUrls" class="hidden">
+            <h2>Generated URLs</h2>
+            <p>Countdown Page URL: <a id="countdownUrl" href="" target="_blank"></a></p>
+            <p>Birthday Card Page URL: <a id="birthdayCardUrl" href="" target="_blank"></a></p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const yearInput = document.getElementById('year');
+            const monthInput = document.getElementById('month');
+            const dayInput = document.getElementById('day');
+            const monthErrorMsg = document.getElementById('monthErrorMsg');
+            const dayErrorMsg = document.getElementById('dayErrorMsg');
+
+            monthErrorMsg.style.display = 'none';
+            dayErrorMsg.style.display = 'none';
+
+            yearInput.addEventListener('input', () => {
+                if (yearInput.value.length > 4) {
+                    yearInput.value = yearInput.value.slice(0, 4);
+                }
+            });
+
+            monthInput.addEventListener('input', () => {
+                if (monthInput.value.length > 2) {
+                    monthInput.value = monthInput.value.slice(0, 2);
+                }
+                if (monthInput.value < 1 || monthInput.value > 12) {
+                    monthErrorMsg.style.display = 'block';
+                } else {
+                    monthErrorMsg.style.display = 'none';
+                }
+                validateDayInput();
+            });
+
+            dayInput.addEventListener('input', () => {
+                if (dayInput.value.length > 2) {
+                    dayInput.value = dayInput.value.slice(0, 2);
+                }
+                validateDayInput();
+            });
+
+            function validateDayInput() {
+                const year = parseInt(yearInput.value) || new Date().getFullYear();
+                const month = parseInt(monthInput.value) || new Date().getMonth() + 1;
+                const daysInMonth = new Date(year, month, 0).getDate();
+
+                if (dayInput.value < 1 || dayInput.value > daysInMonth) {
+                    dayErrorMsg.style.display = 'block';
+                } else {
+                    dayErrorMsg.style.display = 'none';
+                }
+            }
+
+            document.getElementById('urlGeneratorForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log("Form submitted");
+                if (monthErrorMsg.style.display === 'block' || dayErrorMsg.style.display === 'block') {
+                    console.log("Validation errors present");
+                    return;
+                }
+                const name = document.getElementById('name').value;
+                const year = document.getElementById('year').value;
+                const month = document.getElementById('month').value.padStart(2, '0');
+                const day = document.getElementById('day').value.padStart(2, '0');
+                const hour = '00';
+                const minute = '00';
+
+                const endDate = `${year}-${month}-${day}T${hour}:${minute}:00`;
+                console.log("End Date: ", endDate);
+                const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown';
+                const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card';
+                const countdownUrl = `${countdownBaseUrl}?end-date=${encodeURIComponent(endDate)}&n=${encodeURIComponent(name)}`;
+                const birthdayCardUrl = `${birthdayCardBaseUrl}?n=${encodeURIComponent(name)}`;
+
+                // Include parameters of the birthday card in the countdown URL
+                const countdownUrlWithParams = `${countdownUrl}&birthday-card-url=${encodeURIComponent(birthdayCardUrl)}`;
+                console.log("Countdown URL: ", countdownUrlWithParams);
+                console.log("Birthday Card URL: ", birthdayCardUrl);
+
+                document.getElementById('countdownUrl').href = countdownUrlWithParams;
+                document.getElementById('countdownUrl').textContent = countdownUrlWithParams;
+                document.getElementById('birthdayCardUrl').href = birthdayCardUrl;
+                document.getElementById('birthdayCardUrl').textContent = birthdayCardUrl;
+                document.getElementById('generatedUrls').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
