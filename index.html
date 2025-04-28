@@ -152,31 +152,6 @@
             monthErrorMsg.style.display = 'none';
             dayErrorMsg.style.display = 'none';
 
-            yearInput.addEventListener('input', () => {
-                if (yearInput.value.length > 4) {
-                    yearInput.value = yearInput.value.slice(0, 4);
-                }
-            });
-
-            monthInput.addEventListener('input', () => {
-                if (monthInput.value.length > 2) {
-                    monthInput.value = monthInput.value.slice(0, 2);
-                }
-                if (monthInput.value < 1 || monthInput.value > 12) {
-                    monthErrorMsg.style.display = 'block';
-                } else {
-                    monthErrorMsg.style.display = 'none';
-                }
-                validateDayInput();
-            });
-
-            dayInput.addEventListener('input', () => {
-                if (dayInput.value.length > 2) {
-                    dayInput.value = dayInput.value.slice(0, 2);
-                }
-                validateDayInput();
-            });
-
             function validateDayInput() {
                 const year = parseInt(yearInput.value) || new Date().getFullYear();
                 const month = parseInt(monthInput.value) || new Date().getMonth() + 1;
@@ -189,13 +164,15 @@
                 }
             }
 
+            monthInput.addEventListener('input', validateDayInput);
+            dayInput.addEventListener('input', validateDayInput);
+
             document.getElementById('urlGeneratorForm').addEventListener('submit', function(event) {
                 event.preventDefault();
-                console.log("Form submitted");
                 if (monthErrorMsg.style.display === 'block' || dayErrorMsg.style.display === 'block') {
-                    console.log("Validation errors present");
                     return;
                 }
+
                 const name = document.getElementById('name').value;
                 const year = document.getElementById('year').value;
                 const month = document.getElementById('month').value.padStart(2, '0');
@@ -204,17 +181,23 @@
                 const minute = '00';
 
                 const endDate = `${year}-${month}-${day}T${hour}:${minute}:00`;
-                console.log("End Date: ", endDate);
                 const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown';
                 const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card';
                 const countdownUrl = `${countdownBaseUrl}?end-date=${encodeURIComponent(endDate)}&n=${encodeURIComponent(name)}`;
                 const birthdayCardUrl = `${birthdayCardBaseUrl}?n=${encodeURIComponent(name)}`;
-
-                // Include parameters of the birthday card in the countdown URL
                 const countdownUrlWithParams = `${countdownUrl}&birthday-card-url=${encodeURIComponent(birthdayCardUrl)}`;
-                console.log("Countdown URL: ", countdownUrlWithParams);
-                console.log("Birthday Card URL: ", birthdayCardUrl);
 
+                // Save to localStorage
+                const generatedUrls = JSON.parse(localStorage.getItem('generatedUrls')) || [];
+                generatedUrls.push({
+                    name,
+                    endDate,
+                    countdownUrl: countdownUrlWithParams,
+                    birthdayCardUrl
+                });
+                localStorage.setItem('generatedUrls', JSON.stringify(generatedUrls));
+
+                // Display generated URLs
                 document.getElementById('countdownUrl').href = countdownUrlWithParams;
                 document.getElementById('countdownUrl').textContent = countdownUrlWithParams;
                 document.getElementById('birthdayCardUrl').href = birthdayCardUrl;
