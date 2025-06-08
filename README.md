@@ -52,6 +52,11 @@ A simple, responsive webpage for generating personalized countdown and birthday 
 2. Set your base URLs in the code if your directory structure changes.
 3. Open the main HTML file in a browser to use.
 
+## Related Projects
+
+- [Countdown](https://github.com/ShajafKhan/Countdown) — A customizable web countdown timer for events, birthdays, and more.
+- [Responsive-Birthday-Card](https://github.com/ShajafKhan/Responsive-Birthday-Card) — Share an animated, interactive birthday card with personalized greetings and celebration effects.
+
 ## Contributing
 
 Contributions and suggestions are welcome! Please open an issue or submit a pull request.
