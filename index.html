@@ -142,69 +142,71 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const yearInput = document.getElementById('year');
-            const monthInput = document.getElementById('month');
-            const dayInput = document.getElementById('day');
-            const monthErrorMsg = document.getElementById('monthErrorMsg');
-            const dayErrorMsg = document.getElementById('dayErrorMsg');
+        async function shortenUrl(longUrl) {
+    const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
+    if (response.ok) {
+        return await response.text(); // This returns the plain short URL
+    }
+    // fallback if error
+    return longUrl;
+}
 
-            monthErrorMsg.style.display = 'none';
+document.addEventListener('DOMContentLoaded', () => {
+    const yearInput = document.getElementById('year');
+    const monthInput = document.getElementById('month');
+    const dayInput = document.getElementById('day');
+    const monthErrorMsg = document.getElementById('monthErrorMsg');
+    const dayErrorMsg = document.getElementById('dayErrorMsg');
+
+    monthErrorMsg.style.display = 'none';
+    dayErrorMsg.style.display = 'none';
+
+    function validateDayInput() {
+        const year = parseInt(yearInput.value) || new Date().getFullYear();
+        const month = parseInt(monthInput.value) || new Date().getMonth() + 1;
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        if (dayInput.value < 1 || dayInput.value > daysInMonth) {
+            dayErrorMsg.style.display = 'block';
+        } else {
             dayErrorMsg.style.display = 'none';
+        }
+    }
 
-            function validateDayInput() {
-                const year = parseInt(yearInput.value) || new Date().getFullYear();
-                const month = parseInt(monthInput.value) || new Date().getMonth() + 1;
-                const daysInMonth = new Date(year, month, 0).getDate();
+    monthInput.addEventListener('input', validateDayInput);
+    dayInput.addEventListener('input', validateDayInput);
 
-                if (dayInput.value < 1 || dayInput.value > daysInMonth) {
-                    dayErrorMsg.style.display = 'block';
-                } else {
-                    dayErrorMsg.style.display = 'none';
-                }
-            }
+    document.getElementById('urlGeneratorForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (monthErrorMsg.style.display === 'block' || dayErrorMsg.style.display === 'block') {
+            return;
+        }
 
-            monthInput.addEventListener('input', validateDayInput);
-            dayInput.addEventListener('input', validateDayInput);
+        const name = document.getElementById('name').value.trim();
+        const year = document.getElementById('year').value;
+        const month = document.getElementById('month').value.padStart(2, '0');
+        const day = document.getElementById('day').value.padStart(2, '0');
+        const endDate = `${year}-${month}-${day}T00:00:00`;
 
-            document.getElementById('urlGeneratorForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                if (monthErrorMsg.style.display === 'block' || dayErrorMsg.style.display === 'block') {
-                    return;
-                }
+        const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown';
+        const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card';
 
-                const name = document.getElementById('name').value;
-                const year = document.getElementById('year').value;
-                const month = document.getElementById('month').value.padStart(2, '0');
-                const day = document.getElementById('day').value.padStart(2, '0');
-                const hour = '00';
-                const minute = '00';
+        const birthdayCardUrl = `${birthdayCardBaseUrl}?n=${encodeURIComponent(name)}`;
+        const countdownUrl = `${countdownBaseUrl}?end-date=${encodeURIComponent(endDate)}&n=${encodeURIComponent(name)}&birthday-card-url=${encodeURIComponent(birthdayCardUrl)}`;
 
-                const endDate = `${year}-${month}-${day}T${hour}:${minute}:00`;
-                const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown';
-                const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card';
-                const countdownUrl = `${countdownBaseUrl}?end-date=${encodeURIComponent(endDate)}&n=${encodeURIComponent(name)}`;
-                const birthdayCardUrl = `${birthdayCardBaseUrl}?n=${encodeURIComponent(name)}`;
-                const countdownUrlWithParams = `${countdownUrl}&birthday-card-url=${encodeURIComponent(birthdayCardUrl)}`;
+        (async () => {
+            const shortCountdownUrl = await shortenUrl(countdownUrl);
+            const shortBirthdayCardUrl = await shortenUrl(birthdayCardUrl);
 
-                // Save to localStorage
-                const generatedUrls = JSON.parse(localStorage.getItem('generatedUrls')) || [];
-                generatedUrls.push({
-                    name,
-                    endDate,
-                    countdownUrl: countdownUrlWithParams,
-                    birthdayCardUrl
-                });
-                localStorage.setItem('generatedUrls', JSON.stringify(generatedUrls));
-
-                // Display generated URLs
-                document.getElementById('countdownUrl').href = countdownUrlWithParams;
-                document.getElementById('countdownUrl').textContent = countdownUrlWithParams;
-                document.getElementById('birthdayCardUrl').href = birthdayCardUrl;
-                document.getElementById('birthdayCardUrl').textContent = birthdayCardUrl;
-                document.getElementById('generatedUrls').classList.remove('hidden');
-            });
-        });
-    </script>
+            document.getElementById('countdownUrl').href = shortCountdownUrl;
+            document.getElementById('countdownUrl').textContent = shortCountdownUrl;
+            document.getElementById('birthdayCardUrl').href = shortBirthdayCardUrl;
+            document.getElementById('birthdayCardUrl').textContent = shortBirthdayCardUrl;
+            document.getElementById('generatedUrls').classList.remove('hidden');
+        })();
+    });
+});
+</script>
 </body>
-</html>
+    </html>
+    
