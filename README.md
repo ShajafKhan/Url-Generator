@@ -2,6 +2,7 @@
 
 A simple, responsive webpage for generating personalized countdown and birthday card URLs. Enter a name and a target date to create two shareable links: one for a countdown timer and one for a digital birthday card. Each generated URL can be shortened for easy sharing.
 
+[Click for live Preview](https://shajafkhan.github.io/Url-Generator/Pages/index.hhtml)
 ## Features
 
 - 🎂 Generate a digital birthday card URL with a custom name.
