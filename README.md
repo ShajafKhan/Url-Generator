@@ -25,21 +25,12 @@ A simple, responsive webpage for generating personalized countdown and birthday 
 2. Fill out the form with the required information.
 3. Share the generated links.
 
-<!--## Example
-
-- **Countdown Page:**  
-  `https://yourdomain.com/Countdown.html?end-date=2025-12-31T00:00:00&n=John&birthday-card-url=https%3A%2F%2Fyourdomain.com%2FResponsive-Birthday-Card.html%3Fn%3DJohn`
-
-- **Birthday Card Page:**  
-  `https://yourdomain.com/Responsive-Birthday-Card.html?n=John`
-
-*(URLs above are illustrative; use the generator for actual links!)*
--->
 ## Tech Stack
-
-- HTML5 & CSS3
-- Vanilla JavaScript (no frameworks)
-- [TinyURL API](https://tinyurl.com/app/dev) for link shortening
+- **HTML5 & CSS3** - Modern semantic markup and responsive styling
+- **Vanilla JavaScript (ES6+)** - No frameworks, using modern async/await and fetch API
+- **[is.gd API](https://is.gd/apishorteningreference.php)** - Primary URL shortening service with CORS support
+- **[AllOrigins CORS Proxy](https://api.allorigins.win)** - Fallback proxy service for API calls
+- **Progressive Enhancement** - Graceful fallback to original URLs if shortening fails
 
 ## Customization
 

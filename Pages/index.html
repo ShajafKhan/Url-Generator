@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="url-generator-container">
+        <h1>Create Your Countdown & Birthday Card</h1>
+
+        <form id="urlGeneratorForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter the person's name">
+            </div>
+
+            <div class="form-group">
+                <label>Countdown End Date</label>
+                <div class="date-inputs">
+                    <div class="date-group">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" name="year" required min="2025" max="2100" placeholder="2025">
+                    </div>
+                    <div class="date-group">
+                        <label for="month">Month</label>
+                        <input type="number" id="month" name="month" required min="1" max="12" placeholder="12">
+                        <small class="error-msg" id="monthErrorMsg">Please enter a valid month (1-12).</small>
+                    </div>
+                    <div class="date-group">
+                        <label for="day">Day</label>
+                        <input type="number" id="day" name="day" required min="1" max="31" placeholder="25">
+                        <small class="error-msg" id="dayErrorMsg">Please enter a valid day.</small>
+                    </div>
+                </div>
+                <small class="error-msg" id="dateErrorMsg">Please select a future date.</small>
+            </div>
+
+            <button type="submit">Generate URLs</button>
+        </form>
+
+        <div class="loading hidden" id="loadingMsg">
+            <div class="spinner"></div>
+            <span>Generating your URLs...</span>
+        </div>
+
+        <div class="success-msg" id="successMsg">
+            <strong>Success!</strong> URLs have been generated and shortened.
+        </div>
+
+        <div class="warning-msg" id="warningMsg">
+            <strong>Notice:</strong> URL shortening unavailable. Original URLs provided.
+        </div>
+
+        <div id="generatedUrls" class="hidden">
+            <div class="results-section">
+                <h2>Your Generated URLs</h2>
+
+                <div class="url-item">
+                    <div class="url-label">Countdown Page:</div>
+                    <a id="countdownUrl" href="" target="_blank" class="url-link"></a>
+                    <button class="copy-btn" onclick="copyToClipboard('countdownUrl')">Copy</button>
+                </div>
+
+                <div class="url-item">
+                    <div class="url-label">Birthday Card Page:</div>
+                    <a id="birthdayCardUrl" href="" target="_blank" class="url-link"></a>
+                    <button class="copy-btn" onclick="copyToClipboard('birthdayCardUrl')">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
