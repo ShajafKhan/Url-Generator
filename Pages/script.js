@@ -26,7 +26,6 @@ async function shortenUrl(longUrl) {
             }
         } catch (error) {
             console.warn(`${shortener.name} failed:`, error);
-            continue;
         }
     }
 
@@ -34,13 +33,11 @@ async function shortenUrl(longUrl) {
     return longUrl;
 }
 
-
-function copyToClipboard(elementId) {
+function copyToClipboard(elementId, event) {
     const element = document.getElementById(elementId);
     const url = element.textContent;
 
     navigator.clipboard.writeText(url).then(() => {
-
         const copyBtn = event.target;
         const originalText = copyBtn.textContent;
         copyBtn.textContent = 'Copied!';
@@ -143,14 +140,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const day = dayInput.value.padStart(2, '0');
         const endDate = `${year}-${month}-${day}T00:00:00`;
 
-        const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown/Pages/index.html';
-        const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card/Pages/index.html';
+        const countdownBaseUrl = 'https://shajafkhan.github.io/Countdown/Pages';
+        const birthdayCardBaseUrl = 'https://shajafkhan.github.io/Responsive-Birthday-Card/Pages';
 
         const birthdayCardUrl = `${birthdayCardBaseUrl}?n=${encodeURIComponent(name)}`;
         const countdownUrl = `${countdownBaseUrl}?end-date=${encodeURIComponent(endDate)}&n=${encodeURIComponent(name)}&birthday-card-url=${encodeURIComponent(birthdayCardUrl)}`;
 
         try {
-
             const [shortCountdownUrl, shortBirthdayCardUrl] = await Promise.all([
                 shortenUrl(countdownUrl),
                 shortenUrl(birthdayCardUrl)
@@ -174,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error generating URLs:', error);
             alert('There was an error generating the URLs. Please try again.');
         } finally {
-
             document.getElementById('loadingMsg').classList.add('hidden');
             submitButton.disabled = false;
             submitButton.textContent = 'Generate URLs ';

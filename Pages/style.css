@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: whitesmoke;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 20px;
@@ -33,7 +33,6 @@ body {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
 }
 
 h1 {
@@ -149,7 +148,7 @@ button {
 
 button:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 25px #667eea4d;
 }
 
 button:disabled {
@@ -172,7 +171,7 @@ button:disabled {
     color: #667eea;
 }
 
-.spinner {
+.loader {
     width: 20px;
     height: 20px;
     border: 2px solid #e1e8ed;

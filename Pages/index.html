@@ -43,7 +43,7 @@
         </form>
 
         <div class="loading hidden" id="loadingMsg">
-            <div class="spinner"></div>
+            <div class="loader"></div>
             <span>Generating your URLs...</span>
         </div>
 
@@ -62,13 +62,13 @@
                 <div class="url-item">
                     <div class="url-label">Countdown Page:</div>
                     <a id="countdownUrl" href="" target="_blank" class="url-link"></a>
-                    <button class="copy-btn" onclick="copyToClipboard('countdownUrl')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard('countdownUrl',event)">Copy</button>
                 </div>
 
                 <div class="url-item">
                     <div class="url-label">Birthday Card Page:</div>
                     <a id="birthdayCardUrl" href="" target="_blank" class="url-link"></a>
-                    <button class="copy-btn" onclick="copyToClipboard('birthdayCardUrl')">Copy</button>
+                    <button class="copy-btn" onclick="copyToClipboard('birthdayCardUrl',event)">Copy</button>
                 </div>
             </div>
         </div>
